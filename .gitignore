@@ -1,0 +1,6 @@
+./bin
+./tests/bin
+./tests/bin/*
+bin
+*.exe
+*.o
