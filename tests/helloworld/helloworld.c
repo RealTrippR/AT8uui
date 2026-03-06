@@ -1,6 +1,6 @@
 #include <uui/uui_core.h>
 #include <uui/uui_ui.h>
-#include <FTuui/FTuui.h>
+#include <at8uui/at8uui.h>
 
 #include "test_common.h"
 
@@ -20,10 +20,6 @@ void on_window_resize(TW_WINDOW* wnd, uint32_t ww, uint32_t wh) {
 
 int main() 
 {
-    timer tmr;
-    timer_start(&tmr);
-
-
     TW_RESULT rs;
     U_RESULT  rsu;
     TW_INSTANCE instance;
@@ -90,72 +86,36 @@ int main()
     }
     printf("OK\n");
 
-    timer_end(&tmr);
-    printf("[Initializing window took %lld ms]\n", tmr.dur);
 
-    timer_start(&tmr);
     u_thread_context thread_context;
     u_set_current_context(&thread_context);
     u_register(U_ENGINE_PART_SHAPES_BIT | U_ENGINE_PART_UI_BIT);
 
-    timer_end(&tmr);
-    printf("[Initializing the UUI core took %lld ms]\n", tmr.dur);
+    
 
-    timer_start(&tmr);
-    printf("Creating Freetype library... ");
-    FT_Library ftlib;
-    FT_Error error = FT_Init_FreeType(&ftlib);
-    if (error) {printf("FAIL\n"); } printf("OK\n");
+    at8_ref_atlas();
 
-
-    printf("Creating font atlas... ");
-    FTuui_font_atlas font_atlas = {
-        .texture_blend = U_TEXTURE_BLEND_LINEAR,
-        .ftlib = ftlib,
-        .height_px = 30,
-    };
-    if ((rsu = FTuui_font_atlas_new(&font_atlas, L"res/arial.ttf")) < 0) {
-        printf("FAIL\n");goto fail;} printf("OK\n");
-
-
-    ui_style style_white = {
-        .color = {1,1,1,1},
-        .outline_px = 0,
-        .origin = UI_ORIGIN_LEFT_BIT | UI_ORIGIN_TOP_BIT
-    };
-    ui_style_new(&style_white);
 
     ui_font_interface font_interface;
-    FTuui_init_font_interface(&font_interface, &font_atlas);
+    at8_init_font_interface(&font_interface);
 
 
     ui_text_style text_style = {
-        .word_spacing =   {1, UI_TEXT_SPACING_ADD},
+        .word_spacing =   {1, UI_TEXT_SPACING_ADD}, // ??? really? just use int8_t
         .letter_spacing = {1, UI_TEXT_SPACING_ADD},
     };
     
     ui_text text = {
         .font_interface = &font_interface,
-        .str = U_STRNT("A-+-gQKQ+-MHo;exv"),
+        .str = U_STRNT("Hello World"),
         .style = &style_white,
         .text_style = &text_style,
-        .height = 50
+        .height = 50,
+        .encoding = UI_TEXT_ENCODING_ASCII
     };
     printf("Creating text... ");
     if ((rsu = ui_text_new(&text))<0) {printf("FAIL\n");}
     printf("OK\n");
-
-    printf("Updating text string... ");
-    if ((rsu = ui_text_update_str(&text, U_STRNT("Other World"))) < 0) {printf("FAIL\n");}
-    printf("OK\n");
-
-    printf("Updating text string... ");
-    if ((rsu = ui_text_update_str(&text, U_STRNT("Hello World")) < 0)) {printf("FAIL\n");}
-    printf("OK\n");
-
-    
-    timer_end(&tmr);
-    printf("[Initializing Freetype, the font atlas, and manipulating text took %lld ms]\n", tmr.dur);
 
 
     uint32_t winw,winh;
@@ -186,10 +146,11 @@ int main()
 
     ui_text_delete(&text);
     ui_style_delete(&style_white);
-    FTuui_font_atlas_delete(&font_atlas);
+
+
+    at8_unref_atlas();
 
     u_unregister(U_ENGINE_PART_SHAPES_BIT | U_ENGINE_PART_UI_BIT);
-    FT_Done_FreeType(ftlib);
 
     TW_DESTROY_GL_CONTEXT(&gl_window_context);
     TW_DESTROY_GL_INSTANCE(&gl_instance);

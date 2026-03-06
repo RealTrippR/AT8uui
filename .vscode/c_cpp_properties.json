@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "win32",
+            "includePath": [
+                "${env:TWIS_DIR}/TWIS/include",
+                "${env:UUI_DIR}/uui/include",
+                "${env:UUI_DIR}/uui/glad_gl_3_0_0/include",
+                "${env:FTUUI_DIR}/FTuui/include",
+                "${env:FREETYPE_DIR}/include",
+                "${workspaceFolder}/tests"
+            ]
+        }
+    ],
+    "version": 4
+}
