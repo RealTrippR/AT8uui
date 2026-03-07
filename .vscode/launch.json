@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "configurations": [
+        {
+            "preLaunchTask": "helloworld",
+            "name": "hello_world",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": " ${workspaceFolder}/tests/bin/helloworld.exe",
+            "args": [""],
+            "cwd": "${workspaceFolder}/tests",
+            "environment": [],
+        }
+    ]
+}

@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "helloworld",
+            "type": "shell",
+            "dependsOn": ["at7_uui"],
+            "command": "make helloworld -B",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}/tests"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+        },
+        {
+            "label": "at7_uui",
+            "type": "shell",
+            "command": "make -B",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}/at7uui"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+             "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+        }
+    ]
+}

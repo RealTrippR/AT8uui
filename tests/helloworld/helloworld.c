@@ -1,8 +1,7 @@
 #include <uui/uui_core.h>
 #include <uui/uui_ui.h>
-#include <at8uui/at8uui.h>
+#include <at7uui/at7uui.h>
 
-#include "test_common.h"
 
 #include <twis/twis.h>
 #include <twis/twisgl.h>
@@ -20,8 +19,8 @@ void on_window_resize(TW_WINDOW* wnd, uint32_t ww, uint32_t wh) {
 
 int main() 
 {
-    TW_RESULT rs;
-    U_RESULT  rsu;
+    TW_RESULT rs = 0;
+    U_RESULT  rsu = 0;
     TW_INSTANCE instance;
     TW_INSTANCE_CREATE_INFO instance_create_info = {NULL};
     printf("Creating TW instance... ");
@@ -93,11 +92,22 @@ int main()
 
     
 
-    at8_ref_atlas();
+    at7_ref_atlas();
+
+
+
 
 
     ui_font_interface font_interface;
-    at8_init_font_interface(&font_interface);
+    at7_init_font_interface(&font_interface, 0);
+
+    
+    ui_style style_white = {
+        .color = {1,1,1,1},
+        .origin = UI_ORIGIN_LEFT_BIT | UI_ORIGIN_TOP_BIT
+    };
+    ui_style_new(&style_white);
+
 
 
     ui_text_style text_style = {
@@ -110,13 +120,12 @@ int main()
         .str = U_STRNT("Hello World"),
         .style = &style_white,
         .text_style = &text_style,
-        .height = 50,
+        .height = 25,
         .encoding = UI_TEXT_ENCODING_ASCII
     };
     printf("Creating text... ");
     if ((rsu = ui_text_new(&text))<0) {printf("FAIL\n");}
     printf("OK\n");
-
 
     uint32_t winw,winh;
     TW_WINDOW_GET_CLIENT_SIZE(window, &winw, &winh);
@@ -148,7 +157,7 @@ int main()
     ui_style_delete(&style_white);
 
 
-    at8_unref_atlas();
+    at7_deref_atlas();
 
     u_unregister(U_ENGINE_PART_SHAPES_BIT | U_ENGINE_PART_UI_BIT);
 

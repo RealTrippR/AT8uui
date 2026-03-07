@@ -22,5 +22,5 @@ INC = -I${UUI_DIR}/uui/include -I${TWIS_DIR}/TWIS/include -I.
 # END COMP. VARS
 #-------------------------#
 
-$(BLD_DIR)/at7.o: $(wildcard at7/*) $(UUI_A)
+$(BLD_DIR)/at7uui.o: $(wildcard at7uui/*) $(UUI_A)
 	gcc $(C_FLAGS) $(INC) at7uui.c -c -o $@
